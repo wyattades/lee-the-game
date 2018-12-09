@@ -2,7 +2,6 @@ import Phaser from 'phaser';
 
 
 const $canvas = document.getElementById('game');
-$canvas.focus();
 
 const config = {
   canvas: $canvas,
@@ -34,6 +33,17 @@ let score;
 let bark, yeet;
 
 function preload() {
+
+  const loadingText = this.add.text(100, 300, 'Loading Memes: 0%', {
+    fontSize: '40px',
+  });
+  this.load.on('progress', (value) => {
+    loadingText.setText('Loading Memes: ' + parseInt(value * 100) + '%');
+  });
+  this.load.on('complete', () => {
+    loadingText.destroy();
+  });
+
   for (const name of ['winner', 'happy', 'neutral', 'forward', 'corgi', 'vans'])
     this.load.image(name, `assets/${name}.png`);
 
@@ -50,7 +60,9 @@ function preload() {
 }
 
 function create() {
-  console.log(this);
+
+  $canvas.focus();
+
   const music = this.sound.add('heyey');
   music.play(null, {
     loop: true,
